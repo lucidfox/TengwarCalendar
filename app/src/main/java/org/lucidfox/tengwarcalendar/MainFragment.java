@@ -2,6 +2,7 @@ package org.lucidfox.tengwarcalendar;
 
 import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,7 @@ public class MainFragment extends Fragment {
 
     private YearMonth yearMonth;
     private FragmentMainBinding ui;
+    private int contentBackground;
 
     public MainFragment() {
         Calendar cld = Calendar.getInstance();
@@ -67,6 +69,8 @@ public class MainFragment extends Fragment {
         Typeface regularFont = assets.getRegularFont();
         Typeface boldFont = assets.getBoldFont();
 
+        contentBackground = 0xfffafafa;
+
         ui = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
         ui.monthView.setTypeface(assets.getRegularFont());
         ui.yearView.setTypeface(assets.getRegularFont());
@@ -89,7 +93,7 @@ public class MainFragment extends Fragment {
             dayHeader.setText(assets.getDayOfWeekName(day));
             dayHeader.setSingleLine(true);
             dayHeader.setPadding(8, 8, 8, 8);
-            dayHeader.setBackground(getActivity().getWindow().getDecorView().getBackground());
+            dayHeader.setBackgroundColor(contentBackground);
 
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = 0;
@@ -112,7 +116,7 @@ public class MainFragment extends Fragment {
                 dayCell.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
                 dayCell.setSingleLine(true);
                 dayCell.setPadding(8, 8, 8, 8);
-                dayCell.setBackground(getActivity().getWindow().getDecorView().getBackground());
+                dayCell.setBackgroundColor(contentBackground);
 
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                 params.width = 0;
@@ -188,7 +192,14 @@ public class MainFragment extends Fragment {
                 weekRow++;
             }
 
-            dayCells.get(weekRow).get(dayOfWeek).setText(Numerals.toTengwarString(date.getDayOfMonth()));
+            TextView dayCell = dayCells.get(weekRow).get(dayOfWeek);
+            dayCell.setText(Numerals.toTengwarString(date.getDayOfMonth()));
+
+            if (date.equals(today)) {
+                dayCell.setBackgroundColor(getResources().getColor(R.color.colorSelection));
+            } else {
+                dayCell.setBackgroundColor(contentBackground);
+            }
         }
     }
 }
