@@ -49,6 +49,7 @@ public class MainFragment extends Fragment {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
         args.putSerializable(KEY_YEAR_MONTH, yearMonth);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -58,18 +59,10 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(KEY_YEAR_MONTH, yearMonth);
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null) {
-            yearMonth = (YearMonth) savedInstanceState.getSerializable(KEY_YEAR_MONTH);
-        } else if (getArguments() != null) {
+        if (getArguments() != null) {
             yearMonth = (YearMonth) getArguments().getSerializable(KEY_YEAR_MONTH);
         }
 
