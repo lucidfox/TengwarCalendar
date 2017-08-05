@@ -45,10 +45,16 @@ public class MainFragment extends Fragment {
     private FragmentMainBinding ui;
     private int contentBackground;
 
+    public static MainFragment newInstance(YearMonth yearMonth) {
+        MainFragment fragment = new MainFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(KEY_YEAR_MONTH, yearMonth);
+        return fragment;
+    }
+
     public MainFragment() {
         Calendar cld = Calendar.getInstance();
         today = LocalDate.of(cld.get(Calendar.YEAR), cld.get(Calendar.MONTH) + 1, cld.get(Calendar.DAY_OF_MONTH));
-        yearMonth = YearMonth.of(today.getYear(), today.getMonth());
     }
 
     @Override
@@ -57,14 +63,25 @@ public class MainFragment extends Fragment {
         outState.putSerializable(KEY_YEAR_MONTH, yearMonth);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            yearMonth = (YearMonth) savedInstanceState.getSerializable(KEY_YEAR_MONTH);
+        } else if (getArguments() != null) {
+            yearMonth = (YearMonth) getArguments().getSerializable(KEY_YEAR_MONTH);
+        }
+
+        if (yearMonth == null) {
+            yearMonth = YearMonth.of(today.getYear(), today.getMonth());
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            yearMonth = (YearMonth) savedInstanceState.getSerializable(KEY_YEAR_MONTH);
-        }
-
         Assets assets = Assets.get(getActivity());
         Typeface regularFont = assets.getRegularFont();
         Typeface boldFont = assets.getBoldFont();
@@ -201,5 +218,9 @@ public class MainFragment extends Fragment {
                 dayCell.setBackgroundColor(contentBackground);
             }
         }
+    }
+
+    public YearMonth getYearMonth() {
+        return yearMonth;
     }
 }

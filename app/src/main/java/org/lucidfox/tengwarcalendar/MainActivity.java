@@ -20,7 +20,7 @@ public class MainActivity extends FragmentActivity implements YearDialogFragment
         fragment = (MainFragment) fm.findFragmentById(R.id.fragment_container);
 
         if (fragment == null) {
-            fragment = new MainFragment();
+            fragment = MainFragment.newInstance(null);
             fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
     }
